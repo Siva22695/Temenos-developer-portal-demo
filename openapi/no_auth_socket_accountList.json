@@ -1,0 +1,507 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Account List with Balances ",
+    "description": "This Temenos Banking Services API manages the account-related services from Temenos, such as balances, transaction and card details, and account closures. Use:\n- **Account List** to retrieve a summary of an account, including balances, limits and types of interest.\n- **Account Summary** to retrieve the details of a specific account.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.temenos.com"
+    }
+  ],
+  "paths": {
+    "/accounts/{customerId}": {
+      "get": {
+        "tags": [
+          "getAccountList"
+        ],
+        "summary": "Get Account Summary",
+        "description": "Returns the list of accounts belonging to an authenticated user.",
+        "operationId": "getAccountSummary",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Identifier of the CustomerId, for example '510050'.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountId",
+            "in": "query",
+            "description": "Identifier of the accountId. ",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountType",
+            "in": "query",
+            "description": "Identifier of the account. Often referred to as the account number, yet for consistency this is always referred to as accountId. Accepts both IBAN & BBAN.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currencyCode",
+            "in": "query",
+            "description": "Currency code in ISO 4217 format",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AccountDetailsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}": {
+      "get": {
+        "tags": [
+          "getAccountSummary"
+        ],
+        "summary": "Get Account Details",
+        "description": "Returns the details of an account by Account ID, often referred to as the account number.",
+        "operationId": "getAccountDetails",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Identifier of the account. Often referred to as the account number, yet for consistency this is always referred to as accountId. Accepts both IBAN & BBAN.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AccountSummaryResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "QueryHeader": {
+        "properties": {
+          "audit": {
+            "type": "object",
+            "properties": {}
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "The total number of records per page",
+            "format": "int32"
+          },
+          "page_start": {
+            "type": "integer",
+            "description": "The record from which the response should be displayed",
+            "format": "int32"
+          },
+          "total_size": {
+            "type": "integer",
+            "description": "The total number of records present",
+            "format": "int32"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Unique id expected to get as part of response from the core on every enquiry request"
+          }
+        }
+      },
+      "AccountDetailsResponse": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/AccountDetailsResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "AccountDetailsResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "description": "ID of the account or account number (local)"
+            },
+            "accountName": {
+              "type": "string",
+              "description": "Name (Alias) of the account provisioned by the user"
+            },
+            "accountType": {
+              "type": "string",
+              "description": "Financial product type of the account (e.g. Current, Savings)"
+            },
+            "clearedBalance": {
+              "type": "number",
+              "description": "Overall balance of the account, including reserved funds"
+            },
+            "availableBalance": {
+              "type": "number",
+              "description": "Available balance that can be used for transactions"
+            },
+            "overdraftLimit": {
+              "type": "number",
+              "description": "Short term loan amount that allows transactions to be executed to a point below zero balance"
+            },
+            "narrative": {
+              "type": "string",
+              "description": "Free text field to link optional information"
+            },
+            "currencyCode": {
+              "type": "string",
+              "description": "Currency code in ISO 4217 format"
+            },
+            "IBAN": {
+              "type": "string",
+              "description": "International Bank Account Number (IBAN) of the account"
+            },
+            "BIC": {
+              "type": "string",
+              "description": "an 8 character code, defined as 'business party identifier' for SWIFT payments"
+            },
+            "branchCode": {
+              "type": "string",
+              "description": "the branch of the bank to which the account belongs to"
+            },
+            "customerId": {
+              "type": "string",
+              "description": "the customer that owns the accounts"
+            }
+          },
+          "example": {
+            "accountId": 10018,
+            "accountName": "My main account",
+            "accountType": "Current Account",
+            "clearedBalance": 1000,
+            "availableBalance": 1200,
+            "overdraftLimit": 100,
+            "Narrative": null,
+            "currencyCode": "EUR",
+            "IBAN": "NL30RABO8877477636",
+            "BIC": "LOYDCHGGZCH",
+            "branchCode": "LLOYDS TSB BANK PLC ZURICH",
+            "customerId": 100336
+          }
+        }
+      },
+      "AccountSummaryResponse": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/AccountSummaryResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "AccountSummaryResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "description": "ID of the account or account number (local)"
+            },
+            "accountName": {
+              "type": "string",
+              "description": "Name (Alias) of the account provisioned by the user"
+            },
+            "accountType": {
+              "type": "string",
+              "description": "Financial product type of the account (e.g. Current, Savings)"
+            },
+            "clearedBalance": {
+              "type": "number",
+              "description": "Overall balance of the account, including reserved funds"
+            },
+            "availableBalance": {
+              "type": "number",
+              "description": "Available balance that can be used for transactions"
+            },
+            "overdraftLimit": {
+              "type": "number",
+              "description": "Short term loan amount that allows transactions to be executed to a point below zero balance"
+            },
+            "narrative": {
+              "type": "string",
+              "description": "Free text field to link optional information"
+            },
+            "currencyCode": {
+              "type": "string",
+              "description": "Currency code in ISO 4217 format"
+            },
+            "IBAN": {
+              "type": "string",
+              "description": "International Bank Account Number (IBAN) of the account"
+            },
+            "BIC": {
+              "type": "string",
+              "description": "an 8 character code, defined as 'business party identifier' for SWIFT payments"
+            },
+            "branchCode": {
+              "type": "string",
+              "description": "the branch of the bank to which the account belongs to"
+            },
+            "customerId": {
+              "type": "string",
+              "description": "the customer that owns the accounts"
+            }
+          },
+          "example": {
+            "accountId": 10018,
+            "accountName": "My main account",
+            "accountType": "Current Account",
+            "clearedBalance": 1000,
+            "availableBalance": 1200,
+            "overdraftLimit": 100,
+            "Narrative": null,
+            "currencyCode": "EUR",
+            "IBAN": "NL30RABO8877477636",
+            "BIC": "LOYDCHGGZCH",
+            "branchCode": "LLOYDS TSB BANK PLC ZURICH",
+            "customerId": 100336
+          }
+        }
+      },
+      "ErrorHeader": {
+        "properties": {
+          "audit": {
+            "type": "object",
+            "properties": {
+              "T24_time": {
+                "type": "integer",
+                "description": "Time taken by core to respond",
+                "format": "int32"
+              },
+              "requestParse_time": {
+                "type": "number",
+                "description": "Time taken to parse the request by downstream services"
+              },
+              "responseParse_time": {
+                "type": "number",
+                "description": "Time taken to parse the response by downstream services"
+              }
+            }
+          }
+        }
+      },
+      "QueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/QueryErrorResponseBody"
+          }
+        },
+        "description": "QueryErrorResponse"
+      },
+      "QueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual core error message"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: "
+          }
+        }
+      },
+      "BusinessQueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/BusinessQueryErrorResponseBody"
+          }
+        },
+        "description": "BusinessQueryErrorResponse"
+      },
+      "BusinessQueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual Transact error message for bad requests"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: Business"
+          }
+        }
+      },
+      "SystemQueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/SystemQueryErrorResponseBody"
+          }
+        },
+        "description": "SystemQueryErrorResponse"
+      },
+      "SystemQueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual error message caused by core server"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: System"
+          }
+        }
+      }
+    },
+    "responses": {
+      "AccountDetailsResponse": {
+        "description": "QueryHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AccountDetailsResponse"
+            }
+          }
+        }
+      },
+      "AccountSummaryResponse": {
+        "description": "QueryHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AccountSummaryResponse"
+            }
+          }
+        }
+      },
+      "QueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/QueryErrorResponse"
+            }
+          }
+        }
+      },
+      "BusinessQueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BusinessQueryErrorResponse"
+            }
+          }
+        }
+      },
+      "SystemQueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SystemQueryErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

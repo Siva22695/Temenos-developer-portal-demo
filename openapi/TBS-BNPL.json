@@ -1,0 +1,2465 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Temenos Banking Services - Buy Now Pay Later (TBS-BNPL)",
+		"description": "BNPL allows Customers to make purchases and to repay in instalments. The repayment tenure can be chosen by the customer.  These loan business functions stay in close proximity to the product lifecycle, there by providing robust credit experience to customers & merchants.",
+		"version": "v1.0.0"
+	},
+	"servers": [{
+			"url": "http://api.server.com/api/"
+		},
+		{
+			"url": "https://api.server.com/api/"
+		}
+	],
+	"security": [{
+			"basicAuth": []
+		},
+		{
+			"bearerAuth": []
+		}
+	],
+	"tags": [],
+	"paths": {
+		"/bnplCustomer": {
+			"post": {
+				"tags": [
+					"Customer Registration"
+				],
+				"operationId": "createCustomer",
+				"summary": "Create a new Customer Registration for the BNPL system",
+				"description": "Facilitates the customer onboarding with minimal information which includes basic, demographic and contact information and creates the facility for the  registered customer for buy now pay later service. ",
+				"parameters": [{
+					"name": "Authorization",
+					"in": "header",
+					"description": "HTTP Authorization request header-JWT",
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"requestBody": {
+					"description": "JSON request body for a customer and facility registration",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/createCustomer"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "customerRegistrationResponse",
+						"$ref": "#/components/responses/customerRegistrationResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplMerchant": {
+			"post": {
+				"tags": [
+					"Merchant Registration"
+				],
+				"operationId": "createMerchant",
+				"summary": "Create a new Merchant Registration for the BNPL system",
+				"description": "Facilitates the registration of a new Merchant for buy now pay later service. ",
+				"parameters": [{
+					"name": "Authorization",
+					"in": "header",
+					"description": "HTTP Authorization request header-JWT",
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"requestBody": {
+					"description": "JSON request body for a Merchant  registration",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/createMerchant"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "MerchantRegistrationResponse",
+						"$ref": "#/components/responses/customerRegistrationResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplProducts/{customerId}": {
+			"get": {
+				"tags": [
+					"Loan Products"
+				],
+				"summary": "Fetches the list of available Products in the BNPL system",
+				"description": "Retrieves the buy now pay later facility balance details like commitment and outstanding amounts. Qualifies and simulates the applicable buy now pay lFetches the list of available Products in the BNPL systemater products for the given amount and currency value .",
+				"operationId": "getAvailableProducts",
+				"parameters": [{
+						"name": "customerId",
+						"in": "path",
+						"description": "Identifier of the customer",
+						"example": 800159,
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "HTTP Authorization request header-JWT",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "companyId",
+						"in": "header",
+						"description": "Identifier of the lead company of the underlying Entity/Company/Branch for the respective contract for customer data protection purposes. Example US0010001.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"format": "String"
+						}
+					},
+					{
+						"name": "orderAmount",
+						"in": "query",
+						"description": "Indicates the amount of the candidate BNPL loan.",
+						"example": "3000",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "String"
+						}
+					},
+					{
+						"name": "orderCurrency",
+						"in": "query",
+						"description": "Indicates the currency in which the BNPL loan is to be created.",
+						"example": "USD",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "String"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "getAvailableProductsResponse",
+						"$ref": "#/components/responses/getAvailableProductsResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/merchantBNPLList/{merchantId}": {
+			"get": {
+				"tags": [
+					"Merchant List"
+				],
+				"summary": "Fetches the list of available Products in the BNPL system for a particular Merchant",
+				"description": "Retrieves the list of BNPL Loans - Merchant wise .",
+				"operationId": "getMerchantBNPLList",
+				"parameters": [{
+					"name": "merchantId",
+					"in": "path",
+					"description": "ID created in the system for the Merchant",
+					"example": "AMAZON",
+					"required": true,
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"responses": {
+					"200": {
+						"description": "getMerchantBNPLListResponse",
+						"$ref": "#/components/responses/getAvailableProductsResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				},
+				"deprecated": false
+			}
+		},
+		"/bnplOrder": {
+			"post": {
+				"tags": [
+					"Create Order"
+				],
+				"operationId": "createOrder",
+				"summary": "Place a new BNPL Order for the Customer",
+				"description": "Place a new BNPL Order for the Customer.",
+				"parameters": [{
+					"name": "Authorization",
+					"in": "header",
+					"description": "HTTP Authorization request header-JWT",
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"requestBody": {
+					"description": "JSON request body for a place order",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/placeOrder"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "placeOrderResponse",
+						"$ref": "#/components/responses/placeOrderResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplPaymentSchedule": {
+			"get": {
+				"tags": [
+					"Payment Schedule"
+				],
+				"operationId": "getPaymentSchedule",
+				"summary": "Fetches the Payment Schedule along with instalment wise breakup of Principal, Interest and charges",
+				"description": "Fetches the Payment Schedule along with instalment wise breakup of Principal, Interest and charges",
+				"parameters": [{
+						"name": "Authorization",
+						"in": "header",
+						"description": "HTTP Authorization request header-JWT",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "customerId",
+						"in": "query",
+						"description": "Identifier of the Customer",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "merchantId",
+						"in": "query",
+						"required": true,
+						"description": "Unique identifier of the merchant",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "orderId",
+						"in": "query",
+						"required": true,
+						"description": "Unique identifier for the purchase/order",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "loanArrangementID",
+						"in": "header",
+						"description": "Unique identifier of the newly created loan arrangement under the facility",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "getScheduleResponse",
+						"$ref": "#/components/responses/getScheduleResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/BNPLOrderShipment": {
+			"post": {
+				"tags": [
+					"Ship Order"
+				],
+				"summary": "Initiate disbursement of loan proceeds to merchant on shipment of goods",
+				"description": "Initiate disbursement of loan proceeds to merchant on shipment of goods",
+				"operationId": "createOrderShipment",
+				"parameters": [{
+					"name": "Authorization",
+					"in": "header",
+					"description": "HTTP Authorization request header-JWT",
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"requestBody": {
+					"description": "JSON request body for ship order",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/shipOrder"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "shipOrderResponse",
+						"$ref": "#/components/responses/shipOrderResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplOrderRefund": {
+			"post": {
+				"tags": [
+					"Refund Order"
+				],
+				"summary": "Initiate postshipment refunds (full or partial)",
+				"description": "Initiate postshipment refunds (full or partial)",
+				"operationId": "createOrderRefund",
+				"parameters": [{
+					"name": "Authorization",
+					"in": "header",
+					"description": "HTTP Authorization request header-JWT",
+					"schema": {
+						"type": "string"
+					}
+				}],
+				"requestBody": {
+					"description": "JSON request body for a refund order",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/refundOrder"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "refundOrderResponse",
+						"$ref": "#/components/responses/refundOrderResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplLoanRepayment": {
+			"post": {
+				"tags": [
+					"Loan Repayment"
+				],
+				"summary": "Initiate loan repayments",
+				"description": "Initiate loan repayments",
+				"operationId": "createLoanRepayment",
+				"parameters": [{
+						"name": "Authorization",
+						"in": "header",
+						"description": "HTTP Authorization request header-JWT",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "companyId",
+						"in": "header",
+						"description": "Identifier of the lead company of the underlying Entity/Company/Branch for the respective contract for customer data protection purposes. Example US0010001.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"format": "String"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "JSON request body for loan repayment",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/loanRepayment"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "loanRepaymentResponse",
+						"$ref": "#/components/responses/loanRepaymentResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		},
+		"/bnplOrderCancellation ": {
+			"post": {
+				"tags": [
+					"Cancel Order"
+				],
+				"summary": "Initiate preshipment order cancelation (full or partial)",
+				"description": "Initiate preshipment order cancelation (full or partial)",
+				"operationId": "createOrderCancellation",
+				"parameters": [{
+						"name": "Authorization",
+						"in": "header",
+						"description": "HTTP Authorization request header-JWT",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "companyId",
+						"in": "header",
+						"description": "Identifier of the lead company of the underlying Entity/Company/Branch for the respective contract for customer data protection purposes. Example US0010001.",
+						"required": false,
+						"schema": {
+							"type": "string",
+							"format": "String"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "JSON request body for cancel order",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/cancelOrder"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "cancelOrderResponse",
+						"$ref": "#/components/responses/cancelOrderResponse"
+					},
+					"400": {
+						"description": "BusinessScreenErrorResponse",
+						"$ref": "#/components/responses/BusinessScreenErrorResponse"
+					},
+					"500": {
+						"description": "SystemScreenErrorResponse",
+						"$ref": "#/components/responses/SystemScreenErrorResponse"
+					},
+					"default": {
+						"description": "ScreenErrorResponse",
+						"$ref": "#/components/responses/ScreenErrorResponse"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"PayloadHeader": {
+				"properties": {
+					"override": {
+						"properties": {
+							"overrideDetails": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "The identifier of the override."
+										},
+										"description": {
+											"type": "string",
+											"description": "The actual override message."
+										},
+										"type": {
+											"type": "string",
+											"description": "The code related to override message."
+										},
+										"code": {
+											"type": "string"
+										},
+										"responseCode": {
+											"type": "string",
+											"description": "The user input to accept/reject the override."
+										}
+									}
+								}
+							}
+						}
+					},
+					"audit": {
+						"type": "object",
+						"properties": {
+							"versionNumber": {
+								"type": "string",
+								"description": "Current number of the record"
+							}
+						}
+					}
+				}
+			},
+			"ArrangementHeader": {
+				"properties": {
+					"transactionStatus": {
+						"type": "string",
+						"description": "The status of the transaction"
+					},
+					"aaaId": {
+						"type": "string",
+						"description": "The Identifier of the aa record created"
+					},
+					"id": {
+						"type": "string",
+						"description": "The Identifier of the record created"
+					},
+					"status": {
+						"type": "string",
+						"description": "The status of the record"
+					},
+					"uniqueIdentifier": {
+						"type": "string",
+						"description": "The unique identifier/Message Reference of the record created."
+					},
+					"audit": {
+						"type": "object",
+						"properties": {
+							"T24_time": {
+								"type": "integer",
+								"description": "Time taken to response by Transact",
+								"format": "int32"
+							},
+							"requestParse_time": {
+								"type": "number",
+								"description": "Time taken to parse the request by IRIS"
+							},
+							"responseParse_time": {
+								"type": "number",
+								"description": "Time taken to parse the response by IRIS"
+							}
+						}
+					}
+				}
+			},
+			"QueryHeader": {
+				"properties": {
+					"audit": {
+						"type": "object",
+						"properties": {
+							"T24_time": {
+								"type": "integer",
+								"description": "Time taken to response by Transact",
+								"format": "int32"
+							},
+							"requestParse_time": {
+								"type": "number",
+								"description": "Time taken to parse the request by IRIS"
+							},
+							"responseParse_time": {
+								"type": "number",
+								"description": "Time taken to parse the response by IRIS"
+							}
+						}
+					},
+					"page_size": {
+						"type": "integer",
+						"description": "The total number of records per page",
+						"format": "int32"
+					},
+					"page_start": {
+						"type": "integer",
+						"description": "The record from which the response should be displayed",
+						"format": "int32"
+					},
+					"total_size": {
+						"type": "integer",
+						"description": "The total number of records present",
+						"format": "int32"
+					},
+					"page_token": {
+						"type": "string",
+						"description": "Unique id expected to get as part of response from Transact on every enquiry request"
+					}
+				}
+			},
+			"ErrorHeader": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"example": "E-1567",
+						"description": "The Identifier of the record created"
+					},
+					"status": {
+						"type": "string",
+						"example": "FAILED",
+						"description": "The status of the record"
+					},
+					"transactionStatus": {
+						"type": "string",
+						"example": "FAILED",
+						"description": "The status of the transaction"
+					},
+					"uniqueIdentifier": {
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "The unique identifier/Message Reference of the record created."
+					},
+					"audit": {
+						"type": "object",
+						"properties": {
+							"versionNumber": {
+								"type": "integer",
+								"example": "63",
+								"description": "Current number of the record",
+								"format": "int32"
+							},
+							"requestParse_time": {
+								"type": "number",
+								"example": "123ms",
+								"description": "Time taken to parse the request by IRIS"
+							},
+							"responseParse_time": {
+								"type": "number",
+								"example": "123ms",
+								"description": "Time taken to parse the response by IRIS"
+							}
+						}
+					}
+				}
+			},
+			"createCustomer": {
+				"type": "object",
+				"properties": {
+					"customer": {
+						"$ref": "#/components/schemas/customerPayload"
+					},
+					"facility": {
+						"$ref": "#/components/schemas/facilityPayload"
+					}
+				},
+				"description": "customerRegistration"
+			},
+			"customerPayload": {
+				"type": "object",
+				"required": [
+					"externalCustomerID",
+					"dateOfBirth",
+					"customerNames",
+					"customerName",
+					"legalDetails"
+				],
+				"properties": {
+					"externalCustomerID": {
+						"maxLength": 35,
+						"minLength": 1,
+						"type": "string",
+						"example": "A567123",
+						"description": "Unique identifier maintained in BNPL provider system, this is captured to avoid duplication of customer records."
+					},
+					"language": {
+						"maxLength": 8,
+						"minLength": 0,
+						"example": 1,
+						"type": "number",
+						"description": "Inticates the language of the customer.\n  - 1(English)\n  - 2(French)\n  - 3(German)\n  - 4(Spanish)\n  - 5(Arabic)",
+						"enum": [
+							1,
+							2,
+							3,
+							4,
+							5
+						]
+					},
+					"dateOfBirth": {
+						"type": "string",
+						"description": "The date of birth of the customer in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+						"format": "date",
+						"example": "1979-05-19"
+					},
+					"customerNames": {
+						"type": "array",
+						"description": "Name of the customer",
+						"items": {
+							"type": "object",
+							"required": [
+								"customerName"
+							],
+							"properties": {
+								"customerName": {
+									"maxLength": 70,
+									"minLength": 0,
+									"type": "string",
+									"example": "HARRY NEWTON",
+									"description": "Name of the customer"
+								}
+							}
+						}
+					},
+					"legalDetails": {
+						"type": "array",
+						"description": "Indicates the details of the legal document of the Customer",
+						"items": {
+							"type": "object",
+							"required": [
+								"legalId",
+								"legalDocumentName",
+								"legalIssueDate"
+							],
+							"properties": {
+								"legalId": {
+									"maxLength": 35,
+									"minLength": 0,
+									"type": "string",
+									"example": "Z567853",
+									"description": "Unique reference number of the legal document."
+								},
+								"legalDocumentName": {
+									"maxLength": 35,
+									"minLength": 0,
+									"type": "string",
+									"example": "SOCIAL.SECURITY.NO",
+									"description": "Indicates the name of the legal documents such as passport, driving licence etc.",
+									"enum": [
+										"DRIVING.LICENSE",
+										"EIC",
+										"INCORP.CERT",
+										"LEI",
+										"NATIONAL.ID",
+										"NIC",
+										"SOCIAL.SECURITY.NO",
+										"VAT.ID"
+									]
+								},
+								"legalIssueDate": {
+									"type": "string",
+									"description": "Date of issue of the legal document in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+									"format": "date"
+								}
+							}
+						}
+					}
+				}
+			},
+			"facilityPayload": {
+				"type": "object",
+				"required": [
+					"currencyId"
+				],
+				"properties": {
+					"currencyId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "USD",
+						"description": "Identifier of the currency. This is the 3-letter ISO 4217 code of the currency."
+					},
+					"effectiveDate": {
+						"type": "string",
+						"description": "Contains the identifier for the transaction date in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+						"format": "date"
+					},
+					"commitment": {
+						"type": "object",
+						"required": [
+							"amount"
+						],
+						"properties": {
+							"amount": {
+								"maxLength": 18,
+								"minLength": 0,
+								"type": "string",
+								"example": "1000",
+								"description": "Indicates the total amount which will be lent for the term"
+							}
+						}
+					}
+				}
+			},
+			"createMerchant": {
+				"type": "object",
+				"properties": {
+					"customer": {
+						"$ref": "#/components/schemas/MerchantPayload"
+					},
+					"facility": {
+						"$ref": "#/components/schemas/MerchantFacilityPayload"
+					}
+				},
+				"description": "MerchantRegistration"
+			},
+			"MerchantPayload": {
+				"type": "object",
+				"required": [
+					"merchantName",
+					"merchantLegalDocType",
+					"merchantLegalDocId",
+					"merchantAddress",
+					"merchantContactNo",
+					"merchantPurchaseModes",
+					"processingFeeType",
+					"merchantAccountNo"
+				],
+				"properties": {
+					"merchantLegalDocType": {
+						"maxLength": 35,
+						"minLength": 1,
+						"type": "string",
+						"example": "Employer Identification Number",
+						"description": "Identification of the document type declared by the Merchant."
+					},
+					"merchantLegalDocId": {
+						"maxLength": 8,
+						"minLength": 0,
+						"example": 1,
+						"type": "number",
+						"description": "Indicates the Document ID such as Employer identification no., TIN no. etc"
+					},
+					"merchantAddress": {
+						"type": "string",
+						"example": "45 DREWBERY LANE ,NEWYORK 654786",
+						"description": "Complete address of the Merchant"
+					},
+					"merchantNames": {
+						"type": "array",
+						"description": "Name of the Merchant",
+						"items": {
+							"type": "object",
+							"required": [
+								"MerchantName"
+							],
+							"properties": {
+								"MerchantName": {
+									"maxLength": 70,
+									"minLength": 0,
+									"type": "string",
+									"example": "AMAZON SERVICES",
+									"description": "Name of the Merchant"
+								}
+							}
+						}
+					},
+					"merchantContactNo": {
+						"type": "string",
+						"example": "+1(469)859-9120",
+						"description": "Contact Number of the Merchant"
+					},
+					"merchantPurchaseModes": {
+						"type": "string",
+						"example": "WEBSITE",
+						"description": "Purchase modes that the Merchant currently supports - such as Website, Mobile App etc"
+					},
+					"merchantAccountNo": {
+						"type": "string",
+						"example": 1000865,
+						"description": "Purchase modes that the Merchant currently supports - such as Website, Mobile App etc"
+					},
+					"processingFeeType": {
+						"type": "string",
+						"example": "+1(469)859-9120",
+						"description": "Fee Type that is levied on the Customer - this could be Flat Fee per Transaction or Transaction Amount based Fee (Decided by the provider)"
+					}
+				}
+			},
+			"MerchantFacilityPayload": {},
+			"getMerchantBNPLList": {
+				"type": "object",
+				"properties": {
+					"customer": {
+						"$ref": "#/components/schemas/getMerchantBNPLListPayload"
+					},
+					"facility": {
+						"$ref": "#/components/schemas/getMerchantBNPLListFacilityPayload"
+					}
+				},
+				"description": "getMerchantBNPLList"
+			},
+			"getMerchantBNPLListPayload": {
+				"type": "object",
+				"required": [
+					"resultsCount",
+					"customerId",
+					"productId",
+					"loanTenor",
+					"totalInterestAmount",
+					"totalPrincipalAmount",
+					"totalFeesAmount",
+					"totalPaymentAmount",
+					"totalInstalmentAmount",
+					"instalmentFrequency"
+				],
+				"properties": {
+					"resultsCount": {
+						"maxLength": 35,
+						"minLength": 1,
+						"type": "string",
+						"example": "1",
+						"description": "Indicates the number of BNPL Products contained in the simulation result."
+					},
+					"customerId": {
+						"maxLength": 8,
+						"minLength": 0,
+						"example": "800159",
+						"type": "string",
+						"description": "ID created in the system for the customer"
+					},
+					"merchantAddress": {
+						"type": "string",
+						"example": "45 DREWBERY LANE ,NEWYORK 654786",
+						"description": "Complete address of the Merchant"
+					},
+					"merchantNames": {
+						"type": "array",
+						"description": "Name of the Merchant",
+						"items": {
+							"type": "object",
+							"required": [
+								"MerchantName"
+							],
+							"properties": {
+								"MerchantName": {
+									"maxLength": 70,
+									"minLength": 0,
+									"type": "string",
+									"example": "AMAZON SERVICES",
+									"description": "Name of the Merchant"
+								}
+							}
+						}
+					},
+					"merchantContactNo": {
+						"type": "string",
+						"example": "+1(469)859-9120",
+						"description": "Contact Number of the Merchant"
+					},
+					"merchantPurchaseModes": {
+						"type": "string",
+						"example": "WEBSITE",
+						"description": "Purchase modes that the Merchant currently supports - such as Website, Mobile App etc"
+					},
+					"merchantAccountNo": {
+						"type": "string",
+						"example": 1000865,
+						"description": "Purchase modes that the Merchant currently supports - such as Website, Mobile App etc"
+					},
+					"processingFeeType": {
+						"type": "string",
+						"example": "+1(469)859-9120",
+						"description": "Fee Type that is levied on the Customer - this could be Flat Fee per Transaction or Transaction Amount based Fee (Decided by the provider)"
+					}
+				}
+			},
+			"getMerchantBNPLListFacilityPayload": {},
+
+			"placeOrder": {
+				"type": "object",
+				"required": [
+					"customerId",
+					"merchantId",
+					"orderId",
+					"orderDate",
+					"productId",
+					"amount",
+					"ccy"
+				],
+				"properties": {
+					"customerId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "800159",
+						"description": "Unique identifier of the customer record"
+					},
+					"merchantId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "AMAZON",
+						"description": "Unique identifier of the merchant"
+					},
+					"orderId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "2511",
+						"description": "Unique identifier for the purchase/order"
+					},
+					"orderDate": {
+						"type": "string",
+						"description": "Date of order. Dates are expected in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+						"format": "date"
+					},
+					"productId": {
+						"maxLength": 9,
+						"minLength": 0,
+						"type": "string",
+						"example": "PAYIN.3",
+						"description": "Unique identifier of the loan products"
+					},
+					"amount": {
+						"maxLength": 6,
+						"minLength": 0,
+						"type": "string",
+						"example": "3000",
+						"description": "Indicates the order amount for which the BNPL loan is to be created"
+					},
+					"ccy": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "USD",
+						"description": "Indicates the ccy in which the BNPL loan is to be created. This is the 3-letter ISO 4217 code of the currency."
+					}
+				},
+				"description": "placeOrderPayload"
+			},
+			"shipOrder": {
+				"type": "object",
+				"required": [
+					"customerId",
+					"shippingDetails"
+				],
+				"properties": {
+					"customerId": {
+						"maxLength": 35,
+						"minLength": 0,
+						"type": "string",
+						"example": "800159",
+						"description": "Unique identifier of the customer"
+					},
+					"shippingDetails": {
+						"type": "array",
+						"description": "Field value returned by the payment engine (TPH) for information or further processing.",
+						"items": {
+							"type": "object",
+							"required": [
+								"merchantId",
+								"orderId",
+								"amount",
+								"shipmentCcy",
+								"merchantPayableSuspense"
+							],
+							"properties": {
+								"merchantId": {
+									"maxLength": 12,
+									"minLength": 0,
+									"type": "string",
+									"example": "AMAZON",
+									"description": "Contains the reference identifier of the merchant/website."
+								},
+								"orderId": {
+									"maxLength": 12,
+									"minLength": 0,
+									"type": "string",
+									"example": "2511",
+									"description": "Unique identifier for the purchase/order"
+								},
+								"loanArrangementID": {
+									"maxLength": 12,
+									"minLength": 0,
+									"type": "string",
+									"example": "AA22115D06V0",
+									"description": "Contains the Id of the drawing for the particular order"
+								},
+								"amount": {
+									"maxLength": 19,
+									"minLength": 0,
+									"type": "number",
+									"example": 3000,
+									"description": "Indicates the shipping amount for which the BNPL loan disbursal is to be made"
+								},
+								"shipmentCcy": {
+									"maxLength": 13,
+									"minLength": 0,
+									"type": "string",
+									"example": "USD",
+									"description": "Indicates the ccy in which the BNPL disbursal is to be created"
+								},
+								"shipmentDate": {
+									"type": "string",
+									"description": "Indicates the date, when the order was shipped to the customer in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+									"format": "date"
+								},
+								"disbursalDate": {
+									"type": "string",
+									"description": "Indicates the date, when the loan is to be disbursed to the merchant in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'.",
+									"format": "date"
+								},
+								"merchantPayableSuspense": {
+									"maxLength": 19,
+									"minLength": 0,
+									"type": "string",
+									"example": "100009",
+									"description": "Credit account identifier of the payment or transaction"
+								}
+							}
+						}
+					},
+					"merchantFee": {
+						"type": "array",
+						"description": "Field value returned by the payment engine (TPH) for information or further processing.",
+						"items": {
+							"type": "object",
+							"properties": {
+								"amount": {
+									"maxLength": 19,
+									"minLength": 0,
+									"type": "number",
+									"example": 100,
+									"description": "Indicates the fee payable by merchant with the BNPL provider for the finance facilitation"
+								},
+								"feeCcy": {
+									"maxLength": 13,
+									"minLength": 0,
+									"type": "string",
+									"example": "USD",
+									"description": "Indicates the ccy in which the merchant fee is charged"
+								},
+								"merchantFeeSuspense": {
+									"maxLength": 19,
+									"minLength": 0,
+									"type": "string",
+									"example": "100009",
+									"description": "Credit account identifier of the payment or transaction"
+								}
+							}
+						}
+					}
+				}
+			},
+			"refundOrder": {
+				"type": "object",
+				"required": [
+					"merchantId",
+					"orderId",
+					"refundDate",
+					"refundAmount",
+					"merchantPayableSuspense"
+				],
+				"properties": {
+					"merchantId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": "AMAZON",
+						"description": "Unique identifier of the merchant"
+					},
+					"orderId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": 2511,
+						"description": "Unique identifier for the purchase/order"
+					},
+					"loanArrangementID": {
+						"maxLength": 30,
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "Unique identifier of the drawing for this particular order"
+					},
+					"refundDate": {
+						"type": "string",
+						"example": "2022-04-26",
+						"description": "Indicates the value date of refund in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'."
+					},
+					"refundAmount": {
+						"type": "string",
+						"example": "3000",
+						"description": "Indicates the return amount to which the loan commitment is to be adjusted"
+					},
+					"merchantPayableSuspense": {
+						"type": "string",
+						"example": "100008",
+						"description": "Indicates the merchant payable suspense Account"
+					}
+				},
+				"description": "refundOrder"
+			},
+			"loanRepayment": {
+				"type": "object",
+				"required": [
+					"merchantId",
+					"orderId",
+					"repaymentDate",
+					"repaymentAmount",
+					"RepaymentSuspense"
+				],
+				"properties": {
+					"merchantId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": "AMAZON",
+						"description": "Unique identifier of the merchant"
+					},
+					"orderId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": 2511,
+						"description": "Unique identifier for the purchase/order"
+					},
+					"loanArrangementID": {
+						"maxLength": 30,
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "Unique identifier of the drawing for this particular order"
+					},
+					"repaymentDate": {
+						"type": "string",
+						"example": "2022-05-26",
+						"description": "Indicates the value date of repayment in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'."
+					},
+					"repaymentAmount": {
+						"type": "string",
+						"example": "300",
+						"description": "Indicates the repayment amount to which the loan commitment is to be adjusted"
+					},
+					"RepaymentSuspenseAc": {
+						"type": "string",
+						"example": "100008",
+						"description": "Indicates Credit Account Number of the Transaction to which the repayment is made"
+					}
+				},
+				"description": "refundOrder"
+			},
+			"cancelOrder": {
+				"type": "object",
+				"required": [
+					"merchantId",
+					"orderId",
+					"cancelDate",
+					"cancelAmount"
+				],
+				"properties": {
+					"merchantId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": "AMAZON",
+						"description": "Unique identifier of the merchant"
+					},
+					"orderId": {
+						"maxLength": 17,
+						"minLength": 0,
+						"type": "string",
+						"example": 2511,
+						"description": "Unique identifier for the purchase/order"
+					},
+					"loanArrangementID": {
+						"maxLength": 30,
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "Unique identifier of the drawing for this particular order"
+					},
+					"cancelDate": {
+						"type": "string",
+						"example": "2022-05-26",
+						"description": "Indicates the value date of cancellation order in any of the format listed below 'YYYYMMDD', 'YYYY/MM/DD', 'YYYY-MM-DD'."
+					},
+					"cancelAmount": {
+						"type": "string",
+						"example": "3000",
+						"description": "Indicates the cancellation amount to which the loan commitment is to be adjusted"
+					}
+				},
+				"description": "cancelOrder"
+			},
+			"customerRegistrationResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/customerRegistrationResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/customerRegistrationResponseBody"
+					}
+				},
+				"description": "customerRegistrationResponse"
+			},
+			"customerRegistrationResponseHeader": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"customerRegistrationResponseBody": {
+				"type": "object",
+				"properties": {
+					"customerID": {
+						"type": "string",
+						"example": "100001",
+						"description": "The identifier of a customer"
+					},
+					"facilityID": {
+						"type": "number",
+						"example": "AA100001",
+						"description": "Unique identifier of the facility for a customer"
+					}
+				}
+			},
+			"MerchantRegistrationResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/MerchantRegistrationResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/MerchantRegistrationResponseBody"
+					}
+				},
+				"description": "MerchantRegistrationResponse"
+			},
+			"MerchantRegistrationResponseHeader": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"MerchantRegistrationResponseBody": {
+				"type": "object",
+				"properties": {
+					"customerID": {
+						"type": "string",
+						"example": "100001",
+						"description": "The identifier of a customer"
+					},
+					"facilityID": {
+						"type": "number",
+						"example": "AA100001",
+						"description": "Unique identifier of the facility for a customer"
+					}
+				}
+			},
+			"getMerchantBNPLListResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/getMerchantBNPLListResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/getMerchantBNPLListResponseBody"
+					}
+				},
+				"description": "getMerchantBNPLListResponse"
+			},
+			"getMerchantBNPLListResponseHeader": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"getMerchantBNPLListResponseBody": {
+				"type": "object",
+				"properties": {
+					"customerID": {
+						"type": "string",
+						"example": "100001",
+						"description": "The identifier of a customer"
+					},
+					"facilityID": {
+						"type": "number",
+						"example": "AA100001",
+						"description": "Unique identifier of the facility for a customer"
+					}
+				}
+			},
+			"getAvailableProductsResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/getAvailableProductsResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/getAvailableProductsResponseBody"
+					}
+				},
+				"description": "getAvailableProductsResponse"
+			},
+			"getAvailableProductsResponseHeader": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"getAvailableProductsResponseBody": {
+				"type": "object",
+				"properties": {
+					"resultsCount": {
+						"type": "integer",
+						"example": 1,
+						"description": "Indicates the number of the BNPL products contained in the simulationResults"
+					},
+					"simulationResults": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"productId": {
+									"type": "string",
+									"example": "PAYIN.3",
+									"description": "Contains the unique identifier of the BNPL product"
+								},
+								"productName": {
+									"type": "string",
+									"example": "Pay In 3 (Monthly)",
+									"description": "Indicates the name of the BNPL product"
+								},
+								"loanTenorPeriod": {
+									"type": "string",
+									"example": "6M",
+									"description": "Indicates the period of the loan tenor"
+								},
+								"totalInterestAmount": {
+									"type": "integer",
+									"example": 540,
+									"description": "Indicates the totaliInterest amount payable against the loan"
+								},
+								"totalPrincipalAmount": {
+									"type": "integer",
+									"example": 3000,
+									"description": "Indicates the total principal amount payable against the loan"
+								},
+								"totalFeesAmount": {
+									"type": "integer",
+									"example": 100,
+									"description": "Indicates the total fee amount payable against the loan"
+								},
+								"totalPaymentAmount": {
+									"type": "integer",
+									"example": 3640,
+									"description": "Indicates the total amount the customer has to repay"
+								},
+								"instalmentAmount": {
+									"type": "integer",
+									"example": 3540,
+									"description": "Indicates the instalment amount"
+								},
+								"instalmentFrequency": {
+									"type": "integer",
+									"example": 6,
+									"description": "Indicates how often the customer has to pay an instalment"
+								}
+							}
+						}
+					}
+				}
+			},
+			"placeOrderResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/placeOrderResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/placeOrderResponseBody"
+					}
+				},
+				"description": "placeOrderResponse"
+			},
+			"placeOrderResponseHeader": {
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"placeOrderResponseBody": {
+				"type": "object",
+				"properties": {
+					"loanArrangementID": {
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "Unique identifier of the newly created loan arrangement under the facility"
+					},
+					"merchantId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "AMAZON",
+						"description": "Unique identifier of the merchant"
+					},
+					"orderId": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "2511",
+						"description": "Unique identifier for the purchase/order"
+					},
+					"productId": {
+						"maxLength": 9,
+						"minLength": 0,
+						"type": "string",
+						"example": "PAYIN.3",
+						"description": "Unique identifier of the loan product chosen by the customer"
+					},
+					"amount": {
+						"maxLength": 6,
+						"minLength": 0,
+						"type": "string",
+						"example": "3000",
+						"description": "Indicates the order amount for which the BNPL loan is to be created"
+					},
+					"ccy": {
+						"maxLength": 10,
+						"minLength": 0,
+						"type": "string",
+						"example": "USD",
+						"description": "Indicates the ccy in which the BNPL loan is to be created. This is the 3-letter ISO 4217 code of the currency."
+					}
+				}
+			},
+			"getScheduleResponse": {
+				"type": "object",
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/getScheduleResponseHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/getScheduleResponseBody"
+					}
+				},
+				"description": "getScheduleResponse"
+			},
+			"getScheduleResponseHeader": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"getScheduleResponseBody": {
+				"type": "object",
+				"properties": {
+					"loanArrangementID": {
+						"maxLength": 17,
+						"type": "string",
+						"example": "AA22115D06V0",
+						"description": "Indicates an unique identifier of an account"
+					},
+					"schedule": {
+						"type": "array",
+						"description": "To get the payment schedule details of a particular order",
+						"items": {
+							"type": "object",
+							"properties": {
+								"date": {
+									"maxLength": 11,
+									"type": "string",
+									"example": "2022-04-25",
+									"description": "Indicates the date on which activity was performed"
+								},
+								"deferDate": {
+									"maxLength": 19,
+									"type": "string",
+									"example": "2022-04-25",
+									"description": "Indicates the date that the payment has been deferred to"
+								},
+								"totalDue": {
+									"maxLength": 19,
+									"type": "integer",
+									"example": "3582",
+									"description": "Indicates the total due amount for that period"
+								},
+								"principal": {
+									"maxLength": 19,
+									"type": "integer",
+									"example": "3000",
+									"description": "Indicates the principal amount for the period"
+								},
+								"interest": {
+									"maxLength": 19,
+									"type": "integer",
+									"example": "90",
+									"description": "Indicates the interest amount for the period"
+								},
+								"charge": {
+									"maxLength": 20,
+									"type": "integer",
+									"example": "5",
+									"description": "Indicates the charges for this instalment"
+								},
+								"taxAmount": {
+									"maxLength": 2,
+									"type": "integer",
+									"example": "100",
+									"description": "Holds the tax amount"
+								},
+								"totalPayment": {
+									"maxLength": 19,
+									"type": "integer",
+									"example": "597",
+									"description": "Indicates the installment amount"
+								},
+								"outstandingAmount": {
+									"maxLength": 19,
+									"type": "integer",
+									"example": "2985",
+									"description": "Indicates the loan outstanding amount"
+								}
+							}
+						}
+					}
+				}
+			},
+			"shipOrderResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"body": {
+						"$ref": "#/components/schemas/shipOrderResponseBody"
+					}
+				},
+				"description": "BnplPaymentOrderResponse"
+			},
+			"shipOrderResponseBody": {
+				"type": "object",
+				"properties": {
+					"loanDisbursalDetails": {
+						"type": "array",
+						"description": "Additional Information provided to add context",
+						"items": {
+							"type": "object",
+							"properties": {
+								"status": {
+									"type": "string",
+									"example": "success",
+									"description": "Displays the outcome of transaction for Disbursal"
+								},
+								"amount": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "1000",
+									"description": "Indicates the loan disbursal amount"
+								},
+								"debitValueDate": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "2022-04-25",
+									"description": "Indicates the value date of the disbursal transaction"
+								},
+								"paymentOrderId": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "PI221150SS6NGWS1",
+									"description": "Indicates the transaction reference for the disbursal"
+								}
+							}
+						}
+					},
+					"merchantFeePosting": {
+						"type": "array",
+						"description": "Additional Information provided to add context",
+						"items": {
+							"type": "object",
+							"properties": {
+								"status": {
+									"type": "string",
+									"example": "success",
+									"description": "Displays the outcome of transaction for merchant fee"
+								},
+								"amount": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "100",
+									"description": "Indicates the merchant fee amount"
+								},
+								"debitValueDate": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "2022-04-25",
+									"description": "Indicates the value date of the merchant fee transaction"
+								},
+								"paymentOrderId": {
+									"maxLength": 65,
+									"minLength": 0,
+									"type": "string",
+									"example": "PI221150GH6FN0Z2",
+									"description": "Indicates the transaction reference for the merchant fee payment"
+								}
+							}
+						}
+					}
+				}
+			},
+			"refundOrderResponse": {
+				"type": "object",
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/refundOrderResponseHeader"
+					}
+				},
+				"description": "refundOrderResponse"
+			},
+			"refundOrderResponseHeader": {
+				"type": "object",
+				"properties": {
+					"OrderId": {
+						"type": "string",
+						"example": " 2511",
+						"description": "Order Id"
+					},
+					"status": {
+						"type": "string",
+						"example": " success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"loanRepaymentResponse": {
+				"type": "object",
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/loanRepaymentResponseHeader"
+					}
+				},
+				"description": "loanRepaymentResponse"
+			},
+			"loanRepaymentResponseHeader": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Response to contain a Message indicating that Loan Repayment for Order No. <<orderId>> has been processed successfully)"
+					}
+				}
+			},
+			"cancelOrderResponse": {
+				"type": "object",
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/cancelOrderResponseHeader"
+					}
+				},
+				"description": "cancelOrderResponse"
+			},
+			"cancelOrderResponseHeader": {
+				"type": "object",
+				"properties": {
+					"status": {
+						"type": "string",
+						"example": "success",
+						"description": "Status of the API(success/failed)"
+					}
+				}
+			},
+			"overrideBody": {
+				"properties": {
+					"overrideDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"id": {
+									"type": "string",
+									"example": "Dates",
+									"description": "The identifier of the override."
+								},
+								"description": {
+									"type": "string",
+									"example": "It is not a working day",
+									"description": "The actual override message."
+								},
+								"type": {
+									"type": "string",
+									"example": "OVERRIDE-1297",
+									"description": "The code related to override message."
+								},
+								"code": {
+									"type": "string",
+									"example": "O1297"
+								},
+								"options": {
+									"type": "array",
+									"description": "The usable options for the override.",
+									"items": {
+										"type": "string",
+										"example": "ACCEPT OVERRIDE"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"ScreenErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/ScreenErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "ScreenErrorResponse"
+			},
+			"ScreenErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"example": "alternateId",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"example": "PO-156",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"example": "No record(s) found for merchantId/ orderId",
+									"description": "The actual Transact error message "
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"example": "BUSINESS",
+						"description": "The identifier of error type: "
+					}
+				}
+			},
+			"BusinessScreenErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/BusinessScreenErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "BusinessScreenErrorResponse"
+			},
+			"BusinessScreenErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"example": "alternateId",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"example": "PO-156",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"example": "No record(s) found for merchantId/ orderId",
+									"description": "The actual Transact error message for bad requests"
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"example": "BUSINESS",
+						"description": "The identifier of error type: Business"
+					}
+				}
+			},
+			"SystemScreenErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/SystemScreenErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "SystemScreenErrorResponse"
+			},
+			"SystemScreenErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"example": "alternateId",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"example": "PO-156",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"example": "No record(s) found for merchantId/ orderId",
+									"description": "The actual Transact error message caused by server"
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"example": "SYSTEM",
+						"description": "The identifier of error type: System"
+					}
+				}
+			},
+			"ArrangementErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ArrangementHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/ArrangementErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "ArrangementErrorResponse"
+			},
+			"ArrangementErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"description": "The actual Transact error message "
+								},
+								"property": {
+									"type": "string",
+									"description": "Id of the product property"
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: "
+					}
+				}
+			},
+			"BusinessArrangementErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ArrangementHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/BusinessArrangementErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "BusinessArrangementErrorResponse"
+			},
+			"BusinessArrangementErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"description": "The actual Transact error message for bad requests"
+								},
+								"property": {
+									"type": "string",
+									"description": "Id of the product property"
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: Business"
+					}
+				}
+			},
+			"SystemArrangementErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ArrangementHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/SystemArrangementErrorResponseBody"
+					},
+					"override": {
+						"$ref": "#/components/schemas/overrideBody"
+					}
+				},
+				"description": "SystemArrangementErrorResponse"
+			},
+			"SystemArrangementErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"errorDetails": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"fieldName": {
+									"type": "string",
+									"description": "The name of the field"
+								},
+								"code": {
+									"type": "string",
+									"description": "The identifier of the error message"
+								},
+								"message": {
+									"type": "string",
+									"description": "The actual Transact error message caused by server"
+								},
+								"property": {
+									"type": "string",
+									"description": "Id of the product property"
+								}
+							}
+						}
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: System"
+					}
+				}
+			},
+			"QueryErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/QueryErrorResponseBody"
+					}
+				},
+				"description": "QueryErrorResponse"
+			},
+			"QueryErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The identifier of the error message"
+					},
+					"message": {
+						"type": "string",
+						"description": "The actual Transact error message "
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: "
+					}
+				}
+			},
+			"BusinessQueryErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/BusinessQueryErrorResponseBody"
+					}
+				},
+				"description": "BusinessQueryErrorResponse"
+			},
+			"BusinessQueryErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The identifier of the error message"
+					},
+					"message": {
+						"type": "string",
+						"description": "The actual Transact error message for bad requests"
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: Business"
+					}
+				}
+			},
+			"SystemQueryErrorResponse": {
+				"properties": {
+					"header": {
+						"$ref": "#/components/schemas/ErrorHeader"
+					},
+					"error": {
+						"$ref": "#/components/schemas/SystemQueryErrorResponseBody"
+					}
+				},
+				"description": "SystemQueryErrorResponse"
+			},
+			"SystemQueryErrorResponseBody": {
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "The identifier of the error message"
+					},
+					"message": {
+						"type": "string",
+						"description": "The actual Transact error message caused by server"
+					},
+					"type": {
+						"type": "string",
+						"description": "The identifier of error type: System"
+					}
+				}
+			}
+		},
+		"responses": {
+			"getAvailableProductsResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/getAvailableProductsResponse"
+						}
+					}
+				}
+			},
+			"placeOrderResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/placeOrderResponse"
+						}
+					}
+				}
+			},
+			"getScheduleResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/getScheduleResponse"
+						}
+					}
+				}
+			},
+			"shipOrderResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/shipOrderResponse"
+						}
+					}
+				}
+			},
+			"refundOrderResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/refundOrderResponse"
+						}
+					}
+				}
+			},
+			"loanRepaymentResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/loanRepaymentResponse"
+						}
+					}
+				}
+			},
+			"cancelOrderResponse": {
+				"description": "PayloadHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/cancelOrderResponse"
+						}
+					}
+				}
+			},
+			"customerRegistrationResponse": {
+				"description": "customerRegistrationResponse",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/customerRegistrationResponse"
+						}
+					}
+				}
+			},
+			"ScreenErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/ScreenErrorResponse"
+						}
+					}
+				}
+			},
+			"BusinessScreenErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/BusinessScreenErrorResponse"
+						}
+					}
+				}
+			},
+			"SystemScreenErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SystemScreenErrorResponse"
+						}
+					}
+				}
+			},
+			"ArrangementErrorResponse": {
+				"description": "ArrangementHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/ArrangementErrorResponse"
+						}
+					}
+				}
+			},
+			"BusinessArrangementErrorResponse": {
+				"description": "ArrangementHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/BusinessArrangementErrorResponse"
+						}
+					}
+				}
+			},
+			"SystemArrangementErrorResponse": {
+				"description": "ArrangementHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SystemArrangementErrorResponse"
+						}
+					}
+				}
+			},
+			"QueryErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/QueryErrorResponse"
+						}
+					}
+				}
+			},
+			"BusinessQueryErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/BusinessQueryErrorResponse"
+						}
+					}
+				}
+			},
+			"SystemQueryErrorResponse": {
+				"description": "ErrorHeader",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/SystemQueryErrorResponse"
+						}
+					}
+				}
+			}
+		},
+		"securitySchemes": {
+			"basicAuth": {
+				"type": "http",
+				"scheme": "basic"
+			},
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	}
+}

@@ -1,0 +1,2576 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Temenos Banking Services - API for Payments and Beneficiary related services",
+    
+    "description": "This section deals with Beneficiary Management end points that are specific to Payments related services.\n Domestic and International Payments are handled in this section.\n Beneficiary Management end-points include.\n- **Creating Beneficiaries :** End points to create Domestic and International Beneficiaries for a Customer.\n- **Retrieving Beneficiary data:** End points to retrieve the Domestic and International Beneficiaries for a Customer.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+
+    {
+      "url": "https://api.server.com/api"
+    }
+  ],
+  "security": [{
+      "basicAuth": []
+    },
+    {
+      "bearerAuth": []
+    }
+  ],
+  
+  
+  "paths": {
+
+    "/socket/customers/{customerId}/account": {
+      "get": {
+        "tags": [
+          "Customer Accounts"
+        ],
+        "summary": "To get the list of Accounts held by a Customer",
+        "description": "Returns the details of accounts held by a customer",
+        "operationId": "getCustomerAccounts",
+        "parameters": [{
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AccountDetailsResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        },
+        "deprecated": false
+      }
+    },
+
+
+    "/socket/customers/{customerId}/domesticBeneficiaries": {
+      "post": {
+        "tags": [
+          "Domestic Beneficiary Services"
+        ],
+        "summary": "Creates a new Domestic beneficiary for the Customer.\n There can be several Beneficiaries linked to a single Customer",
+        "description": "Creates a new Beneficiary for the Customer",
+        "operationId": "createdomesticBeneficiaries",
+        "parameters": [{
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }, {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+
+        "requestBody": {
+          "description": "body payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createBeneficiariesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+
+
+        "responses": {
+          "200": {
+            "description": "Query Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createBeneficiariesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+
+    "/socket/customers/{customerId}/domesticbeneficiaries": {
+      "get": {
+        "tags": [
+          "Domestic Beneficiary Services"
+        ],
+        "summary": "To get a list of existing Beneficiaries for Domestic Payments for the Customer.",
+        "description": "Display a list of Beneficiaries for the Customer",
+        "operationId": "getDomesticBeneficiary",
+        "parameters": [{
+          "name": "customerId",
+          "in": "path",
+          "description": "Customer ID of the account",
+          "required": true,
+          "example": 800195,
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "List of Benficiaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getBeneficiariesResponse"
+                }
+              }
+            }
+          },
+
+
+
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/socket/customers/{customerId}/internationalBeneficiaries": {
+      "post": {
+        "tags": [
+          "International Beneficiary Services"
+        ],
+        "summary": "Creates a new International beneficiary for the Customer.\n There can be several Beneficiaries linked to a single Customer",
+        "description": "Creates a new Beneficiary for the Customer",
+        "operationId": "createInternationalBeneficiary",
+        "parameters": [{
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+
+        "requestBody": {
+          "description": "body payload",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createIntBeneficiariesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+
+
+        "responses": {
+          "200": {
+            "description": "Query Header",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createIntBeneficiariesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+
+    "/socket/customers/{customerId}/internationalbeneficiaries": {
+      "get": {
+        "tags": [
+          "International Beneficiary Services"
+        ],
+        "summary": "To get a list of existing International Beneficiaries for a Customer.",
+        "description": "Display a list of Beneficiaries for the Customer",
+        "operationId": "getInternationalBeneficiaries",
+        "parameters": [{
+          "name": "customerId",
+          "in": "path",
+          "description": "Customer ID of the account",
+          "required": true,
+          "example": 800195,
+          "schema": {
+            "type": "string"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "List of Benficiaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getIntBeneficiariesResponse"
+                }
+              }
+            }
+          },
+
+
+
+          "400": {
+            "$ref": "#/components/responses/BusinessQueryErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/SystemQueryErrorResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/QueryErrorResponse"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/socket/customers/{customerId}/validatePayment/domestic": {
+      "post": {
+        "tags": [
+          "Payment Validation"
+        ],
+        "summary": "Validates a  payment request.Data that is passed to the server for Validation",
+        "description": "Certain information such as Fee type, fee amount etc are calculated at the Server side based on the data contained in the Payment request and the same is displayed as part of the validation response.",
+        "operationId": "validateDomesticPayment",
+
+        "parameters": [
+
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+
+
+          "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/validateDomesticPaymentRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateDomesticPaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "deprecated": false
+      }
+    },
+
+    "/socket/customers/{customerId}/validatePayment/international": {
+      "post": {
+        "tags": [
+          "Payment Validation"
+        ],
+        "summary": "Validates a  payment request.Data that is passed to the server for Validation",
+        "description": "Certain information such as Fee type, fee amount etc are calculated at the Server side based on the data contained in the Payment request and the same is displayed as part of the validation response.",
+        "operationId": "validateInternationalPayments",
+        "parameters": [
+
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/validateInternationalPaymentRequest"
+              }
+            }
+          }
+        },
+        
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/validateInternationalPaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+
+
+
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/socket/customers/{customerId}/submitPayment/domestic": {
+      "post": {
+        "tags": [
+          "Payment Submission"
+        ],
+        
+          "summary": "Creates a domestic payment.",
+        "description": "Creates a domestic payment.This will submit the Final data that is sent as a POST request to the server for creation of a Payment.",
+        "operationId": "createDomesticPayment",
+        "parameters": [
+
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+
+        
+        
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DomesticPaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomesticPaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    },
+    "/socket/customers/{customerId}/submitPayment/international": {
+      "post": {
+        "tags": [
+          "Payment Submission"
+        ],
+        "summary": "Creates an International payment.",
+        "description": "Creates a International payment.This will submit the Final data that is sent as a POST request to the server for creation of a Payment.",
+        "operationId": "createInternationalPayments",
+        "parameters": [
+
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Customer ID of the account ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "The total number of records per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page_start",
+            "in": "query",
+            "description": "The record from which the response should be displayed",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "credentials",
+            "in": "header",
+            "description": "Username and password to authenticate the API against core-banking.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "String"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InternationalPaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternationalPaymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "security": [{
+          "bearerAuth": []
+        }]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "QueryHeader": {
+        "properties": {
+          "audit": {
+            "type": "object",
+            "properties": {}
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "The total number of records per page",
+            "format": "int32"
+          },
+          "page_start": {
+            "type": "integer",
+            "description": "The record from which the response should be displayed",
+            "format": "int32"
+          },
+          "total_size": {
+            "type": "integer",
+            "description": "The total number of records present",
+            "format": "int32"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "Unique id expected to get as part of response from the core on every enquiry request"
+          }
+        }
+      },
+      "AccountDetailsResponse": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/AccountDetailsResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "AccountDetailsResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Account Details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "pre-set values that are allowed to be input; (e.g.:- LOTTERY, INHERITENCE, GIFT, SAVINGS, PENSION etc)",
+                "properties": {
+                  "AccountId1": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "type": "number",
+                        "example": "100185"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "example": "31926819"
+                      },
+                      "Name": {
+                        "type": "string",
+                        "description": "Name of the account provisioned by the user ",
+                        "example": "EUR Savings account"
+                      },
+
+                      "Type": {
+                        "type": "string",
+                        "description": "Financial product type of the account (e.g. Current, Savings) ",
+                        "example": "Savings Account"
+                      },
+
+                      "currencyCode": {
+                        "type": "string",
+                        "description": "Currency code in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "IBAN": {
+                        "type": "string",
+                        "description": " International Bank Account Number (IBAN) of the account ",
+                        "example": "GB29NWBK60161331926819"
+                      },
+                      "sortCode": {
+                        "type": "string",
+                        "description": "sort code of the account",
+                        "example": "60-16-13"
+                      }
+                    }
+                  },
+                  "AccountId2": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "type": "number",
+                        "example": "100567"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "example": "67928820"
+                      },
+
+                      "Name": {
+                        "type": "string",
+                        "description": "Name of the account provisioned by the user ",
+                        "example": "USD Savings account"
+                      },
+
+                      "Type": {
+                        "type": "string",
+                        "description": "Financial product type of the account (e.g. Current, Savings) ",
+                        "example": "Savings Account"
+                      },
+
+                      "currencyCode": {
+                        "type": "string",
+                        "description": "Currency code in ISO 4217 format ",
+                        "example": "USD"
+                      },
+                      "IBAN": {
+                        "type": "string",
+                        "description": " International Bank Account Number (IBAN) of the account ",
+                        "example": "GB29NWBK60161367928820"
+                      },
+                      "sortCode": {
+                        "type": "string",
+                        "description": "sort code of the account",
+                        "example": "60-16-13"
+                      }
+                    }
+                  },
+                  "AccountId3": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "type": "number",
+                        "example": "100190"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "example": "98997543"
+                      },
+
+                      "Name": {
+                        "type": "string",
+                        "description": "Name of the account provisioned by the user ",
+                        "example": "GBP Current account"
+                      },
+
+                      "Type": {
+                        "type": "string",
+                        "description": "Financial product type of the account (e.g. Current, Savings) ",
+                        "example": "Current Account"
+                      },
+
+                      "currencyCode": {
+                        "type": "string",
+                        "description": "Currency code in ISO 4217 format ",
+                        "example": "GBP"
+                      },
+                      "IBAN": {
+                        "type": "string",
+                        "description": " International Bank Account Number (IBAN) of the account ",
+                        "example": "GB29NWBK60161398997543"
+                      },
+                      "sortCode": {
+                        "type": "string",
+                        "description": "sort code of the account",
+                        "example": "60-16-13"
+                      }
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+      "getBeneficiariesResponse": {
+        "properties": {
+          
+          "body": {
+            "$ref": "#/components/schemas/getBeneficiariesResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "getBeneficiariesResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+                  "beneficiaryId1": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "123456"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "John Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "31926819"
+                      },
+
+                      "sortCode": {
+                        "type": "string",
+                        "description": "Sort code of the Beneficiary Account (Used for UK Accounts) ",
+                        "example": "09-01-31"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-9120"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "johnsmith15@gmail.com"
+                      }
+                    }
+                  },
+                  "beneficiaryId2": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "800192"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "Jaden Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "91926989"
+                      },
+
+                      "sortCode": {
+                        "type": "string",
+                        "description": "Sort code of the Beneficiary Account (Used for UK Accounts) ",
+                        "example": "09-01-32"
+                      },
+                        "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-7970"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "jadensmith2215@gmail.com"
+                      }
+
+                    }
+                  },
+                  "beneficiaryId3": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "800267"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "Alicia Hayes"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "71765995"
+                      },
+
+                      "sortCode": {
+                        "type": "string",
+                        "description": "Sort code of the Beneficiary Account (Used for UK Accounts) ",
+                        "example": "09-01-34"
+                      },
+                        "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)650-9450"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "aliciahayes1986@gmail.com"
+                      }
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+      "getIntBeneficiariesResponse": {
+        "properties": {
+                    "body": {
+            "$ref": "#/components/schemas/getIntBeneficiariesResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "getIntBeneficiariesResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+                  "beneficiaryId1": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "123456"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "John Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "31926819"
+                      },
+
+                      "IBAN": {
+                        "type": "string",
+                        "description": "IBAN of the Beneficiary Account ",
+                        "example": "FI2112345600000785"
+                      },
+                      "BIC": {
+                        "type": "string",
+                        "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                        "example": "HELSFIHHXXX"
+                      },
+                        "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-9120"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "johnsmith15@gmail.com"
+                      },
+                      "address": {
+                        "type": "string",
+                        "description": "Address of the beneficiary",
+                        "example": "Mannerhiementie 2 Helsinki 00100 Finland"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "Country of the beneficiary in ISO 3166-1 standard",
+                        "example": "FI"
+                      }
+                    }
+                  },
+                  "beneficiaryId2": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "345234"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "Jaden Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "31926820"
+                      },
+                      "IBAN": {
+                        "type": "string",
+                        "description": "IBAN of the Beneficiary Account ",
+                        "example": "FI2112345600000986"
+                      },
+                      "BIC": {
+                        "type": "string",
+                        "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                        "example": "HELSFIHHXXX"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-7970"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "jadensmith2215@gmail.com"
+                      }
+
+                    }
+                  },
+                  "beneficiaryId3": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "Id": {
+                        "description": "beneficiary ID ",
+                        "type": "number",
+                        "example": "567334"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "Steven Charles Hough"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "15205176"
+                      },
+
+                      "IBAN": {
+                        "type": "string",
+                        "description": "IBAN of the Beneficiary Account ",
+                        "example": "FI2112345600000986"
+                      },
+                      "BIC": {
+                        "type": "string",
+                        "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                        "example": "DBSSSGSG"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "'+65 90287671"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "stevenhough19@gmail.com"
+                      },
+                      "address": {
+                        "type": "string",
+                        "description": "Address of the beneficiary",
+                        "example": "#12-79, BLOCK 403 TAMPINES STREET 41 SINGAPORE 520403"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "Country of the beneficiary in ISO 3166-1 standard",
+                        "example": "SG"
+                      }
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+
+      "ValidateDomesticPaymentResponse": {
+        "properties": {
+          
+          "body": {
+            "$ref": "#/components/schemas/ValidateDomesticPaymentResponseBody"
+          }
+        },
+        "description": "Query Header"
+      },
+      "ValidateDomesticPaymentResponseBody": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "string",
+            "description": "Local Account Number or IBAN which will be the source of funds for the payment"
+          },
+          "creditAccountNumber": {
+            "type": "string",
+            "description": "Beneficiary Account Number or IBAN"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "Free text entered by the payee when performing the transaction"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "Name of  beneficiary of the payment"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the transaction should be completed. If the field is not submitted, payment will be executed as soon as possible."
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "paymentType": {
+            "type": "string",
+            "description": "type of domestic payment"
+          }
+        },
+        "example": {  "debitAccountNumber": 31926819,
+          "debitAccountSortCode": "60-16-13",
+          "creditAccountNumber": 92692508,
+          "creditAccountSortCode": "60-16-13",
+          "beneficiaryId": "123456",
+          "beneficiaryName": "John Smith",
+          "currency": "GBP",
+          "Amount": 100000,
+          "transactionNarrative": "Test Transfer",
+          "date": "2022-04-09",
+          "chargeType": "SHA",
+          "chargeCode": "FLAT.50",
+          "charges": "50",
+          "paymentType": "CHAPS"
+        }
+      },
+
+      "DomesticPaymentResponse": {
+        "properties": {
+          
+          "body": {
+            "$ref": "#/components/schemas/DomesticPaymentResponseBody"
+          }
+        },
+        "description": "DomesticPaymentResponse"
+      },
+      "DomesticPaymentResponseBody": {
+
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "number",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the debit Account"
+          },
+          "creditAccountNumber": {
+            "type": "number",
+            "description": "Beneficiary Account Number or IBAN"
+          },
+          "creditAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the credit Account"
+          },
+          "beneficiaryId": {
+            "type": "number",
+            "description": "Id of the beneficiary"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "Name of  beneficiary of the payment"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "Free text entered by the payee when performing the transaction"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date on which the Transaction is executed."
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "charges": {
+            "type": "string",
+            "description": "type of domestic payment"
+          },
+          "transactionDate": {
+            "type": "string",
+            "description": "Timestamp the transaction has taken place"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "Transaction Reference created in the system"
+          }
+        },
+        "example": {
+          "debitAccountNumber": 31926819,
+          "debitAccountSortCode": "60-16-13",
+          "creditAccountNumber": 92692508,
+          "creditAccountSortCode": "60-16-13",
+          "beneficiaryId": "123456",
+          "beneficiaryName": "John Smith",
+          "currency": "GBP",
+          "Amount": 100000,
+          "transactionNarrative": "Test Transfer",
+          "date": "2022-04-09",
+          "chargeType": "SHA",
+          "chargeCode": "FLAT.50",
+          "charges": "50",
+          "paymentType": "CHAPS",
+          "transactionReference": "PI221130754T7DVG"
+        }
+
+
+
+
+
+      },
+
+      "createBeneficiariesResponse": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/createBeneficiariesResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "createBeneficiariesResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+
+                  "Status": {
+                    "description": "Status of the beneficiary ",
+                    "type": "number",
+                    "example": "Sucess"
+                  },
+
+                  "beneficiaryId": {
+                    "type": "number",
+                    "description": "beneficiary ID created in the system",
+                    "example": "123456"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the beneficiary",
+                    "example": "John Smith"
+                  },
+                  "accountNumber": {
+                    "type": "number",
+                    "description": "Beneficiary Account Number",
+                    "example": "31926819"
+                  },
+
+                  "sortCode": {
+                    "type": "string",
+                    "description": "Sort code of the Beneficiary Account (Used for UK Accounts) ",
+                    "example": "09-01-31"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "Currency of the Account in ISO 4217 format ",
+                    "example": "EUR"
+                  },
+                  "contactNumber": {
+                    "type": "string",
+                    "description": " Beneficiary contact number ",
+                    "example": "+1(469)859-9120"
+                  },
+                  "eMailId": {
+                    "type": "string",
+                    "description": "Beneficiary e-mail Address",
+                    "example": "johnsmith15@gmail.com"
+                  }
+
+
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+      "createIntBeneficiariesResponse": {
+        "properties": {
+          "body": {
+            "$ref": "#/components/schemas/createIntBeneficiariesResponseBody"
+          }
+        },
+        "description": "AccountDetailsResponse"
+      },
+      "createIntBeneficiariesResponseBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+
+                  "Status": {
+                    "description": "Status of the beneficiary ",
+                    "type": "number",
+                    "example": "Sucess"
+                  },
+                  "beneficiaryId": {
+                    "description": "ID of the Customer for whom the beneficary is being created",
+                    "type": "number",
+                    "example": "667823"
+                  },
+                  "customerId": {
+                    "description": "ID of the Customer for whom the beneficary is being created",
+                    "type": "number",
+                    "example": "800156"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the beneficiary",
+                    "example": "John Smith"
+                  },
+                  "accountNumber": {
+                    "type": "number",
+                    "description": "Beneficiary Account Number",
+                    "example": "31926819"
+                  },
+                  "IBAN": {
+                    "type": "number",
+                    "description": "IBAN of the Beneficiary Account",
+                    "example": "FI2112345600000785"
+                  },
+                  "BIC": {
+                    "type": "string",
+                    "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                    "example": "HELSFIHHXXX"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                    "example": "EUR"
+                  },
+                  "contactNumber": {
+                    "type": "string",
+                    "description": " Beneficiary contact number ",
+                    "example": "+1(469)859-9120"
+                  },
+                  "eMailId": {
+                    "type": "string",
+                    "description": "Beneficiary e-mail Address",
+                    "example": "johnsmith15@gmail.com"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "Address of the beneficiary",
+                    "example": "Mannerhiementie 2 Helsinki 00100 Finland"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "IBAN of the Beneficiary Account",
+                    "example": "FI"
+                  }
+
+
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+
+      "createBeneficiariesRequest": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+                  "beneficiaryDetails": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "customerId": {
+                        "description": "ID of the Customer for whom the beneficary is being created",
+                        "type": "number",
+                        "example": "800156"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "John Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "31926819"
+                      },
+                      "sortCode": {
+                        "type": "string",
+                        "description": "Sort code of the Beneficiary Account (Used for UK Accounts) ",
+                        "example": "09-01-39"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "description": "Currency of the Account in ISO 4217 format",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-9120"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "johnsmith15@gmail.com"
+                      }
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+      "createIntBeneficiariesRequest": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+
+            "Beneficiary Details": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Display a list of Beneficiaries for the Customer",
+                "properties": {
+                  "beneficiaryDetails": {
+                    "type": "object",
+                    "description": "The name of the field",
+                    "properties": {
+                      "customerId": {
+                        "description": "ID of the Customer for whom the beneficary is being created",
+                        "type": "number",
+                        "example": "800156"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the beneficiary",
+                        "example": "John Smith"
+                      },
+                      "accountNumber": {
+                        "type": "number",
+                        "description": "Beneficiary Account Number",
+                        "example": "31926819"
+                      },
+                      "IBAN": {
+                        "type": "number",
+                        "description": "IBAN of the Beneficiary Account",
+                        "example": "FI2112345600000785"
+                      },
+                      "BIC": {
+                        "type": "string",
+                        "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                        "example": "HELSFIHHXXX"
+                      },
+                        "currency": {
+                        "type": "string",
+                        "description": "11 character code, defined as 'business party identifier' for SWIFT payments ",
+                        "example": "EUR"
+                      },
+                      "contactNumber": {
+                        "type": "string",
+                        "description": " Beneficiary contact number ",
+                        "example": "+1(469)859-9120"
+                      },
+                      "eMailId": {
+                        "type": "string",
+                        "description": "Beneficiary e-mail Address",
+                        "example": "johnsmith15@gmail.com"
+                      },
+                      "address": {
+                        "type": "string",
+                        "description": "Address of the beneficiary",
+                        "example": "Mannerhiementie 2 Helsinki 00100 Finland"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "IBAN of the Beneficiary Account",
+                        "example": "FI"
+                      }
+                    }
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      },
+
+
+      "ErrorHeader": {
+        "properties": {
+          "audit": {
+            "type": "object",
+            "properties": {
+              "T24_time": {
+                "type": "integer",
+                "description": "Time taken by core to respond",
+                "format": "int32"
+              },
+              "requestParse_time": {
+                "type": "number",
+                "description": "Time taken to parse the request by downstream services"
+              },
+              "responseParse_time": {
+                "type": "number",
+                "description": "Time taken to parse the response by downstream services"
+              }
+            }
+          }
+        }
+      },
+      "QueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/QueryErrorResponseBody"
+          }
+        },
+        "description": "QueryErrorResponse"
+      },
+      "QueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual core error message"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: "
+          }
+        }
+      },
+      "BusinessQueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/BusinessQueryErrorResponseBody"
+          }
+        },
+        "description": "BusinessQueryErrorResponse"
+      },
+      "BusinessQueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual Transact error message for bad requests"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: Business"
+          }
+        }
+      },
+      "SystemQueryErrorResponse": {
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/ErrorHeader"
+          },
+          "error": {
+            "$ref": "#/components/schemas/SystemQueryErrorResponseBody"
+          }
+        },
+        "description": "SystemQueryErrorResponse"
+      },
+      "SystemQueryErrorResponseBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The identifier of the error message"
+          },
+          "message": {
+            "type": "string",
+            "description": "The actual error message caused by core server"
+          },
+          "type": {
+            "type": "string",
+            "description": "The identifier of error type: System"
+          }
+        }
+      },
+      "StandingOrderCreateRequest": {
+        "type": "object",
+        "properties": {
+          "payeeType": {
+            "type": "string",
+            "description": "Type of standing order beneficiary (e.g. utility, individual)"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "Name of the beneficiary to be paid"
+          },
+          "accountFrom": {
+            "type": "string",
+            "description": "Account used to pay the standing order"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "Free text entered by the payee when performing the transaction"
+          },
+          "beneficiaryAccountNumber": {
+            "type": "string",
+            "description": "Local account number or  IBAN to which the standing order will be paid to"
+          },
+          "frequency": {
+            "type": "string",
+            "description": "Frequency of the payment, e.g. Monthly or Annual"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Order amount"
+          }
+        },
+        "example": {
+          "payeeType": "Utility",
+          "beneficiaryName": "Public Power Corporation",
+          "accountFrom": 10018,
+          "transactionReference": "Standard power bill payment",
+          "beneficiaryAccountNumber": "CH6289144927143145687",
+          "Frequency": "Monthly",
+          "amount": 245.12
+        }
+      },
+      "StandingOrderCreateResponse": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp the transaction has taken place"
+          },
+          "status": {
+            "type": "string",
+            "description": "Standing order status (active, pending, failed, cancelled)"
+          },
+          "nextPaymentDate": {
+            "type": "string",
+            "description": "Date when the next payment will take place"
+          }
+        },
+        "example": {
+          "date": "2022-09-09T04:56:07.000Z",
+          "status": "Active",
+          "nextPaymentDate": "2022-09-09T00:00:00.000Z"
+        }
+      },
+      "DomesticPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "number",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the debit Account"
+          },
+          "creditAccountNumber": {
+            "type": "number",
+            "description": "Beneficiary Account Number or IBAN"
+          },
+          "creditAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the credit Account"
+          },
+          "beneficiaryId": {
+            "type": "number",
+            "description": "Id of the beneficiary"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "Name of  beneficiary of the payment"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "Free text entered by the payee when performing the transaction"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date on which the Transaction is executed."
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "charges": {
+            "type": "string",
+            "description": "type of domestic payment"
+          }
+        },
+        "example": {
+          "debitAccountNumber": 31926819,
+          "debitAccountSortCode": "60-16-13",
+          "creditAccountNumber": 92692508,
+          "creditAccountSortCode": "60-16-13",
+          "beneficiaryId": "123456",
+          "beneficiaryName": "John Smith",
+          "Amount": 100000,
+          "currency": "GBP",
+          "transactionNarrative": "Test Transfer",
+          "date": "2022-04-09",
+          "chargeType": "SHA",
+          "chargeCode": "FLAT.50",
+          "charges": "50",
+          "paymentType": "CHAPS"
+        }
+      },
+
+  "validateDomesticPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "number",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the debit Account"
+          },
+          "creditAccountNumber": {
+            "type": "number",
+            "description": "Beneficiary Account Number or IBAN"
+          },
+          "creditAccountSortCode": {
+            "type": "string",
+            "description": "Sort code of the credit Account"
+          },
+          "beneficiaryId": {
+            "type": "number",
+            "description": "Id of the beneficiary"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "Name of  beneficiary of the payment"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "Free text entered by the payee when performing the transaction"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date on which the Transaction is executed."
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "charges": {
+            "type": "string",
+            "description": "type of domestic payment"
+          }
+        },
+        "example": {
+          "debitAccountNumber": 31926819,
+          "debitAccountSortCode": "60-16-13",
+          "creditAccountNumber": 92692508,
+          "creditAccountSortCode": "60-16-13",
+          "beneficiaryId": "123456",
+          "beneficiaryName": "John Smith",
+          "currency": "GBP",
+          "Amount": 100000,
+          "transactionNarrative": "Test Transfer",
+          "date": "2022-04-09",
+          "paymentType": "CHAPS"
+        }
+      },
+
+
+
+      "InternationalPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "string",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountIBAN": {
+            "type": "string",
+            "description": "IBAN of the debit Account"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Name of the ordering Customer"
+          },
+          "customerAddress": {
+            "type": "string",
+            "description": "Address of the ordering customer"
+          },
+          "customerCountry": {
+            "type": "string",
+            "description": "Country of the Customer in ISO 3166-1 standard."
+          },
+          "debitAmount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "exchangeRate": {
+            "type": "string",
+            "description": "exchange rate between debit and credit currencies"
+          },
+          "debitCurrency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the transaction should be completed. If the field is not submitted, payment will be executed as soon as possible."
+          },
+          "beneficiaryId": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountNumber": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountIBAN": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "beneficiaryAddress": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "beneficiaryCountry": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAccountBIC": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditCurrency": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAmount": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionDate": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "charges": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          }
+        },
+        "example": {
+          "debitAccountNumber": "31926819",
+          "debitAccountIBAN": "GB29NWBK60161331926819",
+          "customerName": "Alex White",
+          "customerAddress": "222 Marylebone Rd, London NW16JQ, United Kingdom",
+          "customerCountry": "UK",
+          "debitAmount": "200",
+          "debitCurrency": "GBP",
+          "beneficiaryId": "123456",
+          "creditAccountNumber": "0000078",
+          "creditAccountIBAN": "FI2112345600000785",
+          "beneficiaryName": "John Smith",
+          "beneficiaryAddress": "Mannerhiementie 2 Helsinki 00100 Finland",
+          "beneficiaryCountry": "FI",
+          "creditAccountBIC": "HELSFIHHXXX",
+          "creditCurrency": "EUR",
+          "creditAmount": "235.18",
+          "transactionNarrative": "Test Transfer",
+          "transactionDate": "2022-04-09",
+          "chargeType": "PAY",
+          "chargeCode": "FLAT.10",
+          "charges": "10",
+          "exchangeRate": "1.18",
+          "orderDate": "2022-04-09"
+        }
+      },
+        "validateInternationalPaymentRequest": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "string",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountIBAN": {
+            "type": "string",
+            "description": "IBAN of the debit Account"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Name of the ordering Customer"
+          },
+          "customerAddress": {
+            "type": "string",
+            "description": "Address of the ordering customer"
+          },
+          "customerCountry": {
+            "type": "string",
+            "description": "Country of the Customer in ISO 3166-1 standard."
+          },
+          "debitAmount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "exchangeRate": {
+            "type": "string",
+            "description": "exchange rate between debit and credit currencies"
+          },
+          "debitCurrency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the transaction should be completed. If the field is not submitted, payment will be executed as soon as possible."
+          },
+          "beneficiaryId": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountNumber": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountIBAN": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "beneficiaryAddress": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "beneficiaryCountry": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAccountBIC": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditCurrency": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAmount": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionDate": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "charges": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          }
+        },
+        "example": {
+          "debitAccountNumber": "31926819",
+          "debitAccountIBAN": "GB29NWBK60161331926819",
+          "customerName": "Alex White",
+          "customerAddress": "222 Marylebone Rd, London NW16JQ, United Kingdom",
+          "customerCountry": "UK",
+          "debitAmount": "200",
+          "debitCurrency": "GBP",
+          "beneficiaryId": "123456",
+          "creditAccountNumber": "0000078",
+          "creditAccountIBAN": "FI2112345600000785",
+          "beneficiaryName": "John Smith",
+          "beneficiaryAddress": "Mannerhiementie 2 Helsinki 00100 Finland",
+          "beneficiaryCountry": "FI",
+          "creditAccountBIC": "HELSFIHHXXX",
+          "creditCurrency": "EUR",
+          "creditAmount": "235.18",
+          "transactionNarrative": "Test Transfer",
+          "transactionDate": "2022-04-09"
+        }
+      },
+      
+      "InternationalPaymentResponse": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "string",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountIBAN": {
+            "type": "string",
+            "description": "IBAN of the debit Account"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Name of the ordering Customer"
+          },
+          "customerAddress": {
+            "type": "string",
+            "description": "Address of the ordering customer"
+          },
+          "customerCountry": {
+            "type": "string",
+            "description": "Country of the Customer in ISO 3166-1 standard."
+          },
+          "debitAmount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "exchangeRate": {
+            "type": "string",
+            "description": "exchange rate between debit and credit currencies"
+          },
+          "debitCurrency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the transaction should be completed. If the field is not submitted, payment will be executed as soon as possible."
+          },
+          "beneficiaryId": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountNumber": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountIBAN": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "beneficiaryAddress": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "beneficiaryCountry": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAccountBIC": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditCurrency": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAmount": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionDate": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "charges": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "date": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          }
+        },
+        "example": {
+          "transactionReference": "PI221090B8GBF49D",
+          "debitAccountNumber": "31926819",
+          "debitAccountIBAN": "GB29NWBK60161331926819",
+          "customerName": "Alex White",
+          "customerAddress": "222 Marylebone Rd, London NW16JQ, United Kingdom",
+          "customerCountry": "UK",
+          "debitAmount": "200",
+          "debitCurrency": "GBP",
+          "beneficiaryId": "123456",
+          "creditAccountNumber": "0000078",
+          "creditAccountIBAN": "FI2112345600000785",
+          "beneficiaryName": "John Smith",
+          "beneficiaryAddress": "Mannerhiementie 2 Helsinki 00100 Finland",
+          "beneficiaryCountry": "FI",
+          "creditAccountBIC": "HELSFIHHXXX",
+          "creditCurrency": "EUR",
+          "creditAmount": "235.18",
+          "transactionNarrative": "Test Transfer",
+          "transactionDate": "2022-04-09",
+          "chargeType": "PAY",
+          "chargeCode": "FLAT.10",
+          "charges": "10",
+          "exchangeRate": "1.18",
+          "orderDateTime": "2022-04-09T04:56:07.000Z"
+        }
+      },
+        "validateInternationalPaymentResponse": {
+        "type": "object",
+        "properties": {
+          "debitAccountNumber": {
+            "type": "string",
+            "description": "local Account Number which will be the source of funds for the payment"
+          },
+          "debitAccountIBAN": {
+            "type": "string",
+            "description": "IBAN of the debit Account"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Name of the ordering Customer"
+          },
+          "customerAddress": {
+            "type": "string",
+            "description": "Address of the ordering customer"
+          },
+          "customerCountry": {
+            "type": "string",
+            "description": "Country of the Customer in ISO 3166-1 standard."
+          },
+          "debitAmount": {
+            "type": "number",
+            "description": "Payment amount"
+          },
+          "exchangeRate": {
+            "type": "string",
+            "description": "exchange rate between debit and credit currencies"
+          },
+          "debitCurrency": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "orderDate": {
+            "type": "string",
+            "format": "date",
+            "description": "Date when the transaction should be completed. If the field is not submitted, payment will be executed as soon as possible."
+          },
+          "beneficiaryId": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountNumber": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "creditAccountIBAN": {
+            "type": "string",
+            "description": "charges are shared (SHA), born by the payee (PAY) or born by the beneficiary (BEN)"
+          },
+          "beneficiaryName": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "beneficiaryAddress": {
+            "type": "string",
+            "description": "Currency code in ISO 4217 format for the target country"
+          },
+          "beneficiaryCountry": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAccountBIC": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditCurrency": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "creditAmount": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionNarrative": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionDate": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeType": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "chargeCode": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "charges": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "date": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          },
+          "transactionReference": {
+            "type": "string",
+            "description": "an 11 character code, defined as 'business party identifier' for SWIFT payments"
+          }
+        },
+        "example": {
+          "debitAccountNumber": "31926819",
+          "debitAccountIBAN": "GB29NWBK60161331926819",
+          "customerName": "Alex White",
+          "customerAddress": "222 Marylebone Rd, London NW16JQ, United Kingdom",
+          "customerCountry": "UK",
+          "debitAmount": "200",
+          "debitCurrency": "GBP",
+          "beneficiaryId": "123456",
+          "creditAccountNumber": "0000078",
+          "creditAccountIBAN": "FI2112345600000785",
+          "beneficiaryName": "John Smith",
+          "beneficiaryAddress": "Mannerhiementie 2 Helsinki 00100 Finland",
+          "beneficiaryCountry": "FI",
+          "creditAccountBIC": "HELSFIHHXXX",
+          "creditCurrency": "EUR",
+          "creditAmount": "235.18",
+          "transactionNarrative": "Test Transfer",
+          "transactionDate": "2022-04-09",
+          "chargeType": "PAY",
+          "chargeCode": "FLAT.10",
+          "charges": "10",
+          "exchangeRate": "1.18",
+          "orderDateTime": "2022-04-09T04:56:07.000Z"
+        }
+      }
+    },
+    "responses": {
+      "AccountDetailsResponse": {
+        "description": "QueryHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AccountDetailsResponse"
+            }
+          }
+        }
+      },
+      "QueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/QueryErrorResponse"
+            }
+          }
+        }
+      },
+      "BusinessQueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BusinessQueryErrorResponse"
+            }
+          }
+        }
+      },
+      "SystemQueryErrorResponse": {
+        "description": "ErrorHeader",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SystemQueryErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
